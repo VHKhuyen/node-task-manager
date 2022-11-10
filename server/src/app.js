@@ -1,10 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const route = require("./routes");
+const notFound = require("./middleware/not-found");
+const errorHandlerMiddleware = require("./middleware//error-handler");
 
-const app = express();
 const db = require("./db/connect");
-const port = 5000;
+const app = express();
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 
@@ -12,6 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 route(app);
+
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 //connect to database
 db.connect();
